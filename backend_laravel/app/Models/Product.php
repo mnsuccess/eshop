@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Event;
 
 class Product extends Model
 {
@@ -22,6 +23,24 @@ class Product extends Model
         'is_discountable',
         'discount',
     ];
+
+    /**
+     * Bootstrap the model and its traits.
+     *
+     * @return void
+     */
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($product) {
+            Event::dispatch('product.creating', $product);
+        });
+        static::updating(function ($product) {
+            Event::dispatch('product.updating', $product);
+        });
+    }
 
     /**
      * Get the Price in decimal
@@ -43,36 +62,6 @@ class Product extends Model
         } else {
             return null;
         }
-    }
-
-    /**
-     * Apply discount to the current product
-     */
-    private function applyDiscount()
-    {
-        if ($this->is_discountable) {
-            if ($this->price >=50 &&  $this->price <= 100) {
-                $this->discount = 0.0;
-            }
-
-            if ($this->price >= 112 && $this->price <= 115) {
-                $this->discount = 0.25;
-            }
-            
-            if ($this->price >= 120) {
-                $this->discount = 0.5;
-            }
-        } else {
-            $this->discount = null;
-        }
-    }
-
-    /**
-     * Apply default image to the current image
-     */
-    private function applyDefaultImage()
-    {
-        $this->image = "https://picsum.photos/800/600?random=12965";
     }
 
     public function orders()
