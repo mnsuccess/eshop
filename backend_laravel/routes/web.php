@@ -20,11 +20,12 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'isAdmin')->group(function () {
     Route::resource('admin/product', ProductController::class)->except('show');
     Route::get('admin/audit', [AuditTrailController::class ,'index'])->name('audit.index');
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        //return view('dashboard');
+        return redirect('admin/product');
     })->name('dashboard');
 });
 
