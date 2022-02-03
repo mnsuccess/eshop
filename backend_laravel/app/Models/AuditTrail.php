@@ -9,6 +9,23 @@ class AuditTrail extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+
+    protected $fillable = [
+        'subject',
+        'query_request',
+        'query_type',
+        'url',
+        'method',
+        'ip',
+        'agent',
+        'user_id',
+        'transaction_id'
+    ];
 
     /**
      * Create Audit Trail for product Action
@@ -26,6 +43,7 @@ class AuditTrail extends Model
             'url' => request()->fullUrl(),
             'method' => request()->method(),
             'ip' => request()->ip(),
+            'transaction_id' => uniqid(),
             'agent' => request()->header('user-agent'),
             'user_id' => auth()->check() ? auth()->user()->id : 0
         ]);

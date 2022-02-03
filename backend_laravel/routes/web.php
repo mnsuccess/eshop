@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\AuditTrailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +20,13 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::middleware('auth')->group(function () {
+    Route::resource('admin/product', ProductController::class)->except('show');
+    Route::get('admin/audit', [AuditTrailController::class ,'index'])->name('audit.index');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
 
 Route::any('/register', function () {
     return  view('auth.login');

@@ -18,7 +18,7 @@ class CreateAuditTrailsTable extends Migration
             $table->string('subject', 255);
             $table->text('query_request')->nullable();
             $table->string('query_type', 255)->default('general');
-            $table->integer('transaction_id')->nullable();
+            $table->string('transaction_id')->nullable();
             $table->string('url', 255);
             $table->string('method', 255);
             $table->string('ip', 255);
