@@ -56,4 +56,19 @@ class User extends Authenticatable
             Event::dispatch('user.created', $user);
         });
     }
+
+    public function isAdmin()
+    {
+        return $this->admin == 1 ;
+    }
+
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class);
+    }
+
+    public function transaction()
+    {
+        return $this>HasMany(Transaction::class);
+    }
 }
