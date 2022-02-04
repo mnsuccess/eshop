@@ -8,36 +8,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Http\Resources\UserResource;
+use App\Http\Requests\API\LoginRequest;
+use App\Http\Requests\API\RegisterRequest;
 
 class AuthController extends Controller
 {
     /**
      * Register user api endpoint
      */
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'email' => 'required|string|unique:users',
-            'password' => 'required|min:6|confirmed',
-        ]);
-    
-        if ($validator->fails()) {
-            return response()->json([
-            'success' => false,
-            'message' => $validator->messages()->toArray()], 500);
-        }
-
-        $user = User::create([
-            "name" => $request->name,
-            "email" => $request->email,
-            "password" => Hash::make($request->password)
-        ]);
-
+        $validated = $request->validated();
+        $validated["password"] = Hash::make($validated["password"]);
+        $user = User::create($validated);
         $accessToken = $user->createToken('auth_token')->plainTextToken;
-
         $responseMessage = "Registration Successful";
-
         return response()->json([
             "success" => true,
             "message" => $responseMessage,
@@ -50,21 +35,9 @@ class AuthController extends Controller
     /**
      * Login User api Endpoint
      */
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string',
-            'password' => 'required|min:6',
-        ]);
-
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->messages()->toArray()
-            ], 500);
-        }
-
+        $request->validated();
         $credentials = $request->only(["email","password"]);
         $user = User::where('email', $credentials['email'])->first();
         if ($user) {
@@ -77,10 +50,8 @@ class AuthController extends Controller
                     "error" => $responseMessage
                 ], 422);
             }
-            
             $accessToken = $user->createToken('auth_Token')->plainTextToken;
             $responseMessage = "Login Successful";
-
             return response()->json([
                         "success" => true,
                         "message" => $responseMessage,
@@ -97,7 +68,6 @@ class AuthController extends Controller
             ], 422);
         }
     }
-
 
     /**
      * user profile information Endpoint
