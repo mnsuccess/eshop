@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Event;
 
 class User extends Authenticatable
 {
@@ -41,4 +42,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Bootstrap the model and its traits.
+     *
+     * @return void
+     */
+
+    public static function boot()
+    {
+        parent::boot();
+        static::created(function ($user) {
+            Event::dispatch('user.created', $user);
+        });
+    }
 }

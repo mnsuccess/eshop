@@ -41,7 +41,7 @@ class Product extends Model
             Event::dispatch('product.updating', $product);
         });
     }
-
+    
     /**
      * Get the Price in decimal
      *@return float

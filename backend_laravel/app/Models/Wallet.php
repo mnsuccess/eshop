@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Event;
 
 class Wallet extends Model
 {
@@ -18,6 +19,20 @@ class Wallet extends Model
         'user_id',
         'balance'
     ];
+
+    /**
+     * Bootstrap the model and its traits.
+     *
+     * @return void
+     */
+
+    public static function boot()
+    {
+        parent::boot();
+        static::created(function ($wallet) {
+            Event::dispatch('wallet.created', $wallet);
+        });
+    }
     
     public function user()
     {
