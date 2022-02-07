@@ -61,7 +61,7 @@ class TransactionController extends Controller
             if (is_null($product->discount)) {
                 $price = $product->price;
             } else {
-                $price = $product->discounted_price;
+                $price = $product->product_discounted_price;
             }
             $wallet = Wallet::where('user_id', Auth::user()->id)->first();
             if ($price > $wallet->balance) {
