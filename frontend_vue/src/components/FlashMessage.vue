@@ -28,3 +28,40 @@
     </transition-group>
   </div>
 </template>
+
+<script>
+export default {
+  name: "FlashMessage",
+  props: {
+    message: {
+      type: String,
+      default: null,
+    },
+    error: {
+      type: [Object, String],
+      default: null,
+    },
+  },
+  computed: {
+    errorKeys() {
+      if (!this.error || this.getType(this.error) === "string") {
+        return null;
+      }
+      return Object.keys(this.error);
+    },
+  },
+  methods: {
+    getErrors(key) {
+      return this.error[key];
+    },
+    getType(obj) {
+      return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
+    },
+  },
+  filters: {
+    titleCase(value) {
+      return value.replace("_", " ");
+    },
+  },
+};
+</script>
