@@ -1,66 +1,102 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## About
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A basic e-commerce/shopping system. That user can purchase things by topping up an amount (in the currency of their choice).
+An admin user can enter the products and prices into the database. At any given time, a user can only buy one thing.
 
-## About Laravel
+## Architecture
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+1. **BACK-END Application**: Powered by **Laravel 8 & Blade with Tailwindcss**.
+   The Backed is used to handle administration features by an admin user:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+    - Load Products in the database with prices
+    - Apply related Discounts
+    - Audit Trail
+    - API (REST) to interact with a client
+      application in order to serve products, prices, discount settings, user logins, and registrations,
+      purchases, top-ups.
+    - User API Authentication using Laravel Sanctum
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Install & Run Laravel Back-End App
 
-## Learning Laravel
+-   Step 1
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+    `git clone https://github.com/mnsuccess/eshop`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+-   Step 2
 
-## Laravel Sponsors
+    `cd eshop/backend_laravel`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+-   Step 3
 
-### Premium Partners
+    `composer install`
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-- **[Romega Software](https://romegasoftware.com)**
+-   Step 4
 
-## Contributing
+    `npm install && npm run dev`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+-   Step 5
 
-## Code of Conduct
+    In Windows:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    `copy .env.example .env`
 
-## Security Vulnerabilities
+    In Linux/Mac:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    `cp .env.example .env`
 
-## License
+-   Step 6
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    `php artisan key:generate`
+
+-   Step 7
+
+    `Create a database and apply related config to the .env file`
+
+-   Step 8
+
+    `php artisan migrate`
+
+-   Step 9 (Optional) run Feature and Unit Test to verify | if in any case this failed just continue with the next step
+    `php artisan test`
+
+-   Step 10
+
+    `php artisan db:seed`
+
+-   Step 11
+    Sanctum needs some specific setup to enable it to work with a separate SPA. Add the following in your .env file:
+
+    `SANCTUM_STATEFUL_DOMAINS=localhost:8080` The stateful domain tells Sanctum which domain you are using for the SPA.
+
+    `SPA_URL=http://localhost:8080`
+
+    `SESSION_DOMAIN=localhost`
+
+-   Step 12
+
+    `php artisan serve`
+
+    Navigate to the admin URL: `http://localhost:8000/`
+
+    NB: Ascertain that the backend is hosted on a web server. ( Nginx, Apache, etc) or local development environment like Valet, etc.
+    here I simply used a laravel artisan serve to host that. you free to use any Webserver
+
+    Default Credentials: email: `admin@admin.com `password:`password`
+
+-   If you wish to test the REST API endpoints, you can do so with the Postman tool.
+
+    `POST http://localhost:8000/api/users/register ` Register a new user | params { name, email,password, password_confirmation}
+
+    `POST http://localhost:8000/api/users/login` Login User and get The ApiToken | param {email,password}
+
+    `GET http://localhost:8000/api/users/view-profile` View User profile | param {ApinToken}
+
+    `POST http://localhost:8000/api/users/wallet-topup` Topup user wallet | param {Amount}
+
+    `POST http://localhost:8000/api/transaction/purchase` Purchase a product | param {product_id}
+
+    `GET http://localhost:8000/api/transaction` view User Transactions | param {ApinToken}
+
+    `GET http://localhost:8000/api/product` View all Products
+
+    `GET http://localhost:8000/api/product/:id` View specific product
