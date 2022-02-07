@@ -1,12 +1,22 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
+    <Navigation />
+    <main class="my-8">
+      <router-view />
+    </main>
   </div>
 </template>
+<script>
+import Navigation from "@/components/Navigation";
+
+export default {
+  name: "App",
+  components: {
+    Navigation,
+  },
+  setup() {},
+};
+</script>
 
 <style>
 #app {
@@ -20,7 +30,6 @@
 #nav {
   padding: 30px;
 }
-
 #nav a {
   font-weight: bold;
   color: #2c3e50;
