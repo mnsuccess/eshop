@@ -81,13 +81,14 @@ export const actions = {
   },
   topupWallet({ commit, dispatch }, amount) {
     commit("SET_LOADING", true);
+    commit("SET_ERROR", null);
     TransactionService.requestTopUpWallet(amount)
       .then((response) => {
         commit("SET_SUCCESS", response.data.success);
         commit("SET_MESSAGE", response.data.message);
         dispatch("getTransactions");
-        dispatch("user/getUser", {}, { root: true });
         commit("SET_LOADING", false);
+        dispatch("user/getUser", {}, { root: true });
       })
       .catch((error) => {
         commit("SET_LOADING", false);
