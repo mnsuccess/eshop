@@ -17,7 +17,7 @@ class ProductObserver
         //apply discount
         $product->discount = applyDiscount($product);
         //default image
-        if (!is_null($product->image)) {
+        if (is_null($product->image)) {
             $product->image =  random_image();
         }
     }
