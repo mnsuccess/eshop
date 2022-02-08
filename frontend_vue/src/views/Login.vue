@@ -6,7 +6,9 @@
       <div class="flex flex-col items-center space-y-3">
         <span class="text-2xl leading-normal font-semi-bold">Sign in</span>
         <p class="leading-normal">Use your eShop Account</p>
+        <img v-if="loading" src="https://i.imgur.com/JfPpwOA.gif" />
       </div>
+      <FlashMessage :error="error" />
       <form action="javascript:void(0)" @submit="LoginUser" class="my-10">
         <div class="relative mb-2">
           <input
@@ -51,10 +53,17 @@
 
 <script>
 import { mapGetters } from "vuex";
+import FlashMessage from "@/components/FlashMessage";
 export default {
   name: "Login",
+  components: {
+    FlashMessage,
+  },
   computed: {
     ...mapGetters("user", ["loading", "error"]),
+  },
+  created() {
+    this.$store.dispatch("user/resetError");
   },
   data() {
     return {
@@ -66,7 +75,6 @@ export default {
   },
   methods: {
     LoginUser() {
-      this.error = null;
       const payload = {
         email: this.user.email,
         password: this.user.password,

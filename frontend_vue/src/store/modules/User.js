@@ -60,6 +60,7 @@ export const getters = {
 export const actions = {
   userRegister({ commit }, user) {
     commit("SET_LOADING", true);
+    commit("SET_ERROR", null);
     UserService.requestRegister(user)
       .then((response) => {
         commit("SET_USER", response.data.data);
@@ -69,7 +70,6 @@ export const actions = {
         router.go();
       })
       .catch((error) => {
-        router.go();
         commit("SET_LOADING", false);
         commit("SET_ERROR", getError(error));
       });
@@ -77,6 +77,7 @@ export const actions = {
 
   userLogin({ commit }, user) {
     commit("SET_LOADING", true);
+    commit("SET_ERROR", null);
     UserService.requestLogin(user)
       .then((response) => {
         commit("SET_USER", response.data.data);
@@ -86,7 +87,6 @@ export const actions = {
         router.go();
       })
       .catch((error) => {
-        router.go();
         commit("SET_LOADING", false);
         commit("SET_ERROR", getError(error));
       });
@@ -104,6 +104,7 @@ export const actions = {
       })
       .catch((error) => {
         commit("SET_ERROR", getError(error));
+        router.go();
       });
   },
 
@@ -119,5 +120,8 @@ export const actions = {
       commit("SET_USER", null);
       commit("SET_ERROR", getError(error));
     }
+  },
+  resetError({ commit }) {
+    commit("SET_ERROR", null);
   },
 };

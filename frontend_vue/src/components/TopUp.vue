@@ -3,11 +3,18 @@
     class="max-w-md bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700"
   >
     <div class="flex flex-col items-center p-20 pb-10 mt-2">
-      <div class="relative mb-2">
+      <img
+        v-if="loading"
+        class="w-8 h-8 my-2"
+        src="https://i.imgur.com/JfPpwOA.gif"
+      />
+      <FlashMessage :error="error" />
+      <div class="relative mt-2 mb-2">
         <input
+          v-if="!loading"
           v-model="amount"
           name="amount"
-          type="numeric"
+          type="number"
           id="amount"
           placeholder="Amount"
           autofocus
@@ -27,8 +34,12 @@
 
 <script>
 import { mapGetters } from "vuex";
+import FlashMessage from "@/components/FlashMessage";
 export default {
   name: "TopUp",
+  components: {
+    FlashMessage,
+  },
   data() {
     return {
       amount: 0,
@@ -36,6 +47,9 @@ export default {
   },
   computed: {
     ...mapGetters("transaction", ["loading", "error"]),
+  },
+  created() {
+    this.$store.dispatch("transaction/resetError");
   },
   methods: {
     topup() {
