@@ -6,7 +6,9 @@
       <div class="flex flex-col items-center space-y-3">
         <span class="text-2xl leading-normal font-semi-bold">Sign Up</span>
         <p class="leading-normal">Create your eShop Account</p>
+        <img v-if="loading" src="https://i.imgur.com/JfPpwOA.gif" />
       </div>
+      <FlashMessage :error="error" />
       <form action="javascript:void(0)" @submit="registerUser" class="my-10">
         <div class="relative mb-2">
           <input
@@ -73,8 +75,12 @@
 
 <script>
 import { mapGetters } from "vuex";
+import FlashMessage from "@/components/FlashMessage";
 export default {
   name: "Register",
+  components: {
+    FlashMessage,
+  },
   computed: {
     ...mapGetters("user", [
       "loading",
@@ -82,6 +88,9 @@ export default {
       "registerError",
       "registerSuccess",
     ]),
+  },
+  created() {
+    this.$store.dispatch("user/resetError");
   },
   data() {
     return {
@@ -91,12 +100,10 @@ export default {
         password: "",
         confirmation_password: "",
       },
-      message: "",
     };
   },
   methods: {
     registerUser() {
-      this.error = null;
       const payload = {
         name: this.user.name,
         email: this.user.email,
