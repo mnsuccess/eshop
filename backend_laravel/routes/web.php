@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuditTrailController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +25,8 @@ Route::get('/', function () {
 Route::middleware('auth', 'isAdmin')->group(function () {
     Route::resource('admin/product', ProductController::class)->except('show');
     Route::get('admin/audit', [AuditTrailController::class ,'index'])->name('audit.index');
+    Route::get('admin/order', [OrderController::class ,'index'])->name('order.index');
+    Route::get('admin/user', [UserController::class ,'index'])->name('user.index');
     Route::get('/dashboard', function () {
         //return view('dashboard');
         return redirect('admin/product');

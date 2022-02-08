@@ -76,6 +76,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
+        AuditTrail::addToAudit('Product', null, 'Deleteted Product '.$product->id);
         return  redirect(route('product.index'));
     }
 }
