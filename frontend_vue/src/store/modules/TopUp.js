@@ -1,10 +1,9 @@
 import { getError } from "@/utils/helpers";
-import TransactionService from "@/services/TransactionService";
+import TopUpService from "@/services/TopUpService";
 
 export const namespaced = true;
 
 export const state = {
-  transactions: [],
   loading: false,
   error: null,
   success: null,
@@ -12,9 +11,6 @@ export const state = {
 };
 
 export const mutations = {
-  SET_TRANSACTIONS(state, transactions) {
-    state.transactions = transactions;
-  },
   SET_LOADING(state, loading) {
     state.loading = loading;
   },
@@ -30,9 +26,6 @@ export const mutations = {
 };
 
 export const getters = {
-  transactions: (state) => {
-    return state.transactions;
-  },
   loading: (state) => {
     return state.loading;
   },
@@ -48,14 +41,16 @@ export const getters = {
 };
 
 export const actions = {
-  getTransactions({ commit }) {
+  topupWallet({ commit, dispatch }, amount) {
     commit("SET_LOADING", true);
-    TransactionService.fetchTransactions()
+    commit("SET_ERROR", null);
+    TopUpService.requestTopUpWallet(amount)
       .then((response) => {
         commit("SET_SUCCESS", response.data.success);
         commit("SET_MESSAGE", response.data.message);
-        commit("SET_TRANSACTIONS", response.data.data);
+        dispatch("transaction/getTransactions", {}, { root: true });
         commit("SET_LOADING", false);
+        dispatch("user/getUser", {}, { root: true });
       })
       .catch((error) => {
         commit("SET_LOADING", false);
