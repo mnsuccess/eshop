@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\API\Controller;
 use Illuminate\Support\Facades\Auth;
 
 use App\models\Product;
@@ -33,11 +33,7 @@ class PurchaseController extends Controller
             $wallet = Wallet::where('user_id', Auth::user()->id)->first();
             if ($price > $wallet->balance) {
                 $responseMessage = "NSF Insufficient funds, TopUp Your Wallet";
-                return response()->json([
-                    "success" => false,
-                    "message" => $responseMessage,
-                    "error" => $responseMessage
-                ], 422);
+                return $this->failure($responseMessage, $responseMessage);
             } else {
                 $responseMessage = "Purchase Successful";
                 $wallet->balance = $wallet->balance - $price;
@@ -51,18 +47,11 @@ class PurchaseController extends Controller
                     'order_ref' => uniqid() ,
                     'total_payable' => $price
                 ]);
-                return response()->json([
-                    "success" => true,
-                    "message" => $responseMessage,
-                ], 200);
+                return $this->success($responseMessage);
             }
         } else {
             $responseMessage = "Sorry, This product does not exist";
-            return response()->json([
-                "success" => false,
-                "message" => $responseMessage,
-                "error" => $responseMessage
-            ], 422);
+            return $this->failure($responseMessage, $responseMessage);
         }
     }
 }

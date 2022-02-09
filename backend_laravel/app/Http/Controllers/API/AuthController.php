@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\API\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -20,14 +20,7 @@ class AuthController extends Controller
         $validated["password"] = Hash::make($validated["password"]);
         $user = User::create($validated);
         $accessToken = $user->createToken('auth_token')->plainTextToken;
-        $responseMessage = "Registration Successful";
-        return response()->json([
-            "success" => true,
-            "message" => $responseMessage,
-            "data" => new UserResource($user),
-            "token" => $accessToken,
-            "token_type" => "bearer",
-        ], 200);
+        return $this->success("Registration Successful", new UserResource($user), $accessToken);
     }
 
     /**
@@ -41,29 +34,14 @@ class AuthController extends Controller
         if ($user) {
             if (!auth()->attempt($credentials)) {
                 $responseMessage = "Invalid username or password";
-                
-                return response()->json([
-                    "success" => false,
-                    "message" => $responseMessage,
-                    "error" => $responseMessage
-                ], 422);
+                return $this->failure($responseMessage, $responseMessage);
             }
             $accessToken = $user->createToken('auth_Token')->plainTextToken;
             $responseMessage = "Login Successful";
-            return response()->json([
-                        "success" => true,
-                        "message" => $responseMessage,
-                        "data" => new UserResource($user),
-                        "token" => $accessToken,
-                        "token_type" => "bearer",
-                    ], 200);
+            return $this->success("Login Successful", new UserResource($user), $accessToken);
         } else {
             $responseMessage = "Sorry, this user does not exist";
-            return response()->json([
-                "success" => false,
-                "message" => $responseMessage,
-                "error" => $responseMessage
-            ], 422);
+            return $this->failure($responseMessage, $responseMessage);
         }
     }
 
@@ -72,12 +50,7 @@ class AuthController extends Controller
      */
     public function profile()
     {
-        $responseMessage = "user profile";
-        return response()->json([
-            "success" => true,
-            "message" => $responseMessage,
-            "data" =>  new UserResource(Auth::user())
-        ], 200);
+        return $this->success("User Profile", new UserResource(Auth::user()));
     }
 
     /**
@@ -86,10 +59,6 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->user()->tokens()->delete();
-        $responseMessage = "successfully logged out";
-        return response()->json([
-            'success' => true,
-            'message' => $responseMessage
-        ], 200);
+        return $this->success("Successfully Logged Out");
     }
 }

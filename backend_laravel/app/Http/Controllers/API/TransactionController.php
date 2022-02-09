@@ -17,12 +17,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $responseMessage = "User transactions";
         $transaction = Transaction::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
-        return response()->json([
-            "success" => true,
-            "message" => $responseMessage,
-            "data" => TransactionResource::collection($transaction)
-        ], 200);
+        return $this->success("User transactions", TransactionResource::collection($transaction));
     }
 }
