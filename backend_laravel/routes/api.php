@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\TransactionController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\PurchaseController;
+use App\Http\Controllers\API\TopupController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,8 +25,8 @@ Route::post('/users/login', [AuthController::class, 'login'])->name('api.login.u
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/users/profile', [AuthController::class, 'profile'])->name('api.profile.user');
     Route::post('/users/logout', [AuthController::class, 'logout'])->name('api.logout.user');
-    Route::get('/transaction', [TransactionController::class, 'viewTransactions'])->name('api.transaction.user');
-    Route::post('/transaction/topup', [TransactionController::class, 'topup'])->name('api.transaction.topup.user');
-    Route::post('/transaction/purchase', [TransactionController::class, 'purchase'])->name('api.transaction.purchase.user');
+    Route::apiResource('/transactions', TransactionController::class)->only('index');
+    Route::post('/purchase', PurchaseController::class);
+    Route::post('/topup', TopupController::class);
 });
 Route::apiResource('/products', ProductController::class);
