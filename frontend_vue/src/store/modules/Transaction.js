@@ -1,6 +1,8 @@
 import { getError } from "@/utils/helpers";
 import router from "@/router";
 import TransactionService from "@/services/TransactionService";
+import PurchaseService from "@/services/PurchaseService";
+import TopUpService from "@/services/TopUpService";
 
 export const namespaced = true;
 
@@ -64,7 +66,7 @@ export const actions = {
   purchaseProduct({ commit, state }, product_id) {
     commit("SET_LOADING", true);
     commit("SET_ERROR", null);
-    TransactionService.requestPurchaseProduct(product_id)
+    PurchaseService.requestPurchaseProduct(product_id)
       .then((response) => {
         commit("SET_SUCCESS", response.data.success);
         commit("SET_MESSAGE", response.data.message);
@@ -82,7 +84,7 @@ export const actions = {
   topupWallet({ commit, dispatch }, amount) {
     commit("SET_LOADING", true);
     commit("SET_ERROR", null);
-    TransactionService.requestTopUpWallet(amount)
+    TopUpService.requestTopUpWallet(amount)
       .then((response) => {
         commit("SET_SUCCESS", response.data.success);
         commit("SET_MESSAGE", response.data.message);

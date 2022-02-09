@@ -48,7 +48,7 @@ export const actions = {
     commit("SET_LOADING", true);
     ProductService.fetchProducts()
       .then((response) => {
-        commit("SET_PRODUCTS", response.data[0].products);
+        commit("SET_PRODUCTS", response.data.data);
         commit("SET_LOADING", false);
       })
       .catch((error) => {
@@ -60,7 +60,7 @@ export const actions = {
     commit("SET_LOADING", true);
     ProductService.fetchProduct(id)
       .then((response) => {
-        commit("SET_PRODUCT", response.data[0].product);
+        commit("SET_PRODUCT", response.data.data);
         commit("SET_LOADING", false);
       })
       .catch((error) => {
