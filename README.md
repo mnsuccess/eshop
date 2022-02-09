@@ -26,6 +26,11 @@ This application is split into two Apps:
    - perform purchases
    - View their transactions
 
+NB: I decided to keep the frontend and backend folder projects in the same directory and repository for simplicity.
+However, in a serious version, this should be done in two separate repositories: ).
+To maintain track of the commits, I prefixed all of my backend commits with [B] and all of my frontend commits with [F].
+I realize it's not the best practice, but it was useful since I used the unique Repo for both backend and frontend. 😊
+
 ## Install & Run Laravel Back-End App
 
 - Step 1
