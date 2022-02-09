@@ -28,14 +28,14 @@ export default {
     FlashMessage,
   },
   computed: {
-    ...mapGetters("transaction", ["loading", "error"]),
+    ...mapGetters("purchase", ["loading", "error"]),
   },
   created() {
-    this.$store.dispatch("transaction/resetError");
+    this.$store.dispatch("purchase/reset");
   },
   methods: {
     purchase() {
-      this.$store.dispatch("transaction/purchaseProduct", this.product_id);
+      this.$store.dispatch("purchase/purchaseProduct", this.product_id);
       this.amount = "";
     },
   },

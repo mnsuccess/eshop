@@ -26,3 +26,16 @@ if (!function_exists('applyDiscount')) {
         }
     }
 }
+
+if (!function_exists('addTransaction')) {
+    function addTransaction(\App\Models\Wallet $wallet, $action, $amount, $note)
+    {
+        \App\Models\Transaction::create([
+            'action' => $action,
+            'user_id' => $wallet->user_id,
+            'wallet_id' => $wallet->id,
+            'amount' => $amount,
+            'note' => $note
+        ]);
+    }
+}

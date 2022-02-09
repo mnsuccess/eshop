@@ -46,14 +46,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("transaction", ["loading", "error"]),
+    ...mapGetters("topup", ["loading", "error"]),
   },
   created() {
-    this.$store.dispatch("transaction/resetError");
+    this.$store.dispatch("topup/reset");
   },
   methods: {
     topup() {
-      this.$store.dispatch("transaction/topupWallet", this.amount);
+      this.$store.dispatch("topup/topupWallet", this.amount);
       this.amount = "";
     },
   },

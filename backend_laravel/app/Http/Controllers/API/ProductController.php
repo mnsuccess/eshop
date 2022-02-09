@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Controllers\API\Controller;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 
@@ -17,11 +16,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-        return response([
-            "success" => true,
-            "message" => "shop Product",
-            ['products' => ProductResource::collection($products)]
-        ], 200);
+        return $this->success("Shop Products", ProductResource::collection($products));
     }
 
     /**
@@ -32,10 +27,6 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return response([
-            "success" => true,
-            "message" => "shop Product",
-            ['product' => new ProductResource($product)]
-        ], 200);
+        return $this->success("Shop Product", new ProductResource($product));
     }
 }
